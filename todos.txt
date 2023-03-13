@@ -1,0 +1,7 @@
+Learn Solidity
+Learn React
+Learn C ++
+Learn Python
+Learn Java
+Learn React Redux
+Learn React Native
