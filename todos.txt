@@ -1,5 +1,5 @@
-Master Java
 Learn Solidity
-Learn Python
-Learn Java
-Write a blog
+Master Java
+Learn React
+Master Solidity
+Master React
