@@ -1,6 +1,12 @@
 import PySimpleGUI as sg
 import functionMain
 from supportFont import addCharacter, removeCharacter
+import time
+
+sg.theme("Black")
+
+
+clock = sg.Text("", key="clock")
 label = sg.Text("Type in a to-do")
 input_box = sg.InputText(tooltip="Enter a to-do", key="todo")
 add_button = sg.Button("Add")
@@ -16,14 +22,16 @@ complete_button = sg.Button("Complete")
 exit_button = sg.Button("Exit")
 
 window = sg.Window(
-    "To-do App", layout=[[label], 
+    "To-do App", layout=[[clock],
+                         [label], 
                          [input_box, add_button], [list_box, edit_button, complete_button],
                          [exit_button]], 
                          font=("Helvetica", 20))
 
 
 while True: 
-    event, values = window.read()
+    event, values = window.read(timeout=200)
+    window["clock"].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
     print(event)
     print(values)
 
@@ -37,32 +45,42 @@ while True:
             window["todos"].update(values=refined_todos)
         
         case "Edit":
-            todo_to_edit= values["todos"][0] 
-            new_todo = values["todo"] 
-            todos = functionMain.get_todos()
-            refined_todos = removeCharacter(todos)
-            index = refined_todos.index(todo_to_edit)
-            refined_todos[index] = new_todo
-            txt_file_list = addCharacter(refined_todos)
-            functionMain.write_todos(txt_file_list)
-            window["todos"].update(values=refined_todos)
+            try: 
+                todo_to_edit= values["todos"][0] 
+                new_todo = values["todo"] 
+                todos = functionMain.get_todos()
+                refined_todos = removeCharacter(todos)
+                index = refined_todos.index(todo_to_edit)
+                refined_todos[index] = new_todo
+                txt_file_list = addCharacter(refined_todos)
+                functionMain.write_todos(txt_file_list)
+                window["todos"].update(values=refined_todos)
+
+            except IndexError:
+                sg.popup("Please select an item to edit!", font=("Helvetica", 20))
+
+
         case "todos":
             window["todo"].update(value=values["todos"][0])
 
 
         case "Complete":
-            todo_to_complete = values["todos"][0] + "\n"
-            todos = functionMain.get_todos()
-            todos.remove(todo_to_complete)
-            refined_todos = removeCharacter(todos)
-            txt_file_list = addCharacter(refined_todos)
-            functionMain.write_todos(txt_file_list)
-            window["todos"].update(values=refined_todos)
-            window["todo"].update(value="")      
+            try:
+                todo_to_complete = values["todos"][0] + "\n"
+                todos = functionMain.get_todos()
+                todos.remove(todo_to_complete)
+                refined_todos = removeCharacter(todos)
+                txt_file_list = addCharacter(refined_todos)
+                functionMain.write_todos(txt_file_list)
+                window["todos"].update(values=refined_todos)
+                window["todo"].update(value="")
+
+            except IndexError:
+                sg.popup("Please select an item to complete!", font=("Helvetica", 20))      
 
         case "Exit":
             break
-        
+
         case sg.WIN_CLOSED:
             break
 

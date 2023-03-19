@@ -1,5 +1,6 @@
 Learn Solidity
 Master Java
 Learn React
-Master Solidity
-Master React
+Master Solidity Fast
+Learn Python
+Learn C++
