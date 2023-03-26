@@ -3,4 +3,3 @@ Master Java
 Learn React
 Master Solidity Fast
 Learn Python
-Learn C++
